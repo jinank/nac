@@ -10,6 +10,7 @@ use App\RealEstate;
 use App\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Crypt;
 
 class DiscoverController extends Controller
 {
@@ -24,6 +25,67 @@ class DiscoverController extends Controller
         $properties=RealEstate::limit(6)->latest()->get();
         // echo json_encode('hello');exit;
         return view('MainSite.Content.Discover.index',compact("properties","Business",'Videos','Video'));
+    }
+    public function searchpropery(Request $request){
+        if($request->ajax())
+        {
+            $output="";
+            if (is_numeric($request->search)){  
+                $properties=RealEstate::where('price','LIKE','%'.$request->search."%")->limit(6)->latest()->get();
+            }else{
+                $properties=RealEstate::where('cityName','LIKE','%'.$request->search."%")->limit(6)->latest()->get();
+            }
+            if($properties)
+            {
+                foreach ($properties as $key => $product) {
+                    $output.= '<div class="card mx-2" style="width: 18rem;">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title font-weight-bold">'.$product->name.'</h5>
+                                        <p class="card-text m-0"><span class="font-weight-bold mr-1">City:</span>'.$product->cityName.'</p>
+                                        <p class="card-text m-0"><span class="font-weight-bold mr-1">Price:</span>'.$product->price.'</p>
+                                    </div>
+                                </div>';
+                }
+                return Response($output);
+            }
+
+        }
+
+    }
+    public function searchtvshow(Request $request){
+        if($request->ajax())
+        {
+            $output="";
+               $Video=Video::where('is_approved','=','Yes')->get();
+                $Videos = Video::leftJoin('generes', 'videos.genere_id', 'generes.id')
+                ->where('is_approved', '=', 'Yes')
+                ->where(function ($query) use ($request) {
+                    $query->where('videos.video_title', 'LIKE', '%' . $request->search . '%')
+                          ->orWhere('generes.title', 'LIKE', '%' . $request->search . '%');
+                })
+                ->select('videos.*', 'generes.title as genere')
+                ->get();
+            // $Video=Video::where('is_approved','=','Yes')->get();
+            // $Videos=Video::leftJoin('generes','videos.genere_id','generes.id')->where('is_approved','=','Yes')->select('videos.*','generes.title as genere')->where('videos.video_title','LIKE','%'.$request->search."%")->get();
+            if($Videos)
+            {
+                foreach ($Videos as $key => $product)
+                {
+                    $encryptedUrl = Crypt::encryptString($product->id);
+                    $output.= '<div class="card mx-2" style="width: 18rem;">'.
+                                    '<img src="' . asset('Data/Thumbnail/' . $product->thumbnail) . '" class="card-img-top" alt="">' .
+                                    '<div class="card-body d-flex flex-column">'.
+                                        '<h5 class="card-title font-weight-bold mb-0">'.substr($product->video_title, 0, 20).'</h5>'.
+                                        '<p class="card-text mt-0"><span class="font-weight-bold mr-1">Genre:</span>'.$product->genere.'</p>'.
+                                        '<div class="mt-auto">
+                                            <a href="' . url('live?watch=' . $encryptedUrl) . '" class="btn btn-primary">Watch</a>
+                                        </div>
+                                    </div>
+                                </div>';
+                }
+                return Response($output);
+            }
+        }
     }
     public function getAllBusiness() {
         $Business=Business::where('is_approved','=','Yes')->latest()->get();

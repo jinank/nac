@@ -48,6 +48,7 @@ Route::get('/creator/registration', [LoginController::class, 'registerCreatorFor
 Route::post('/creator/registration', [LoginController::class, 'registerCreator'])->name('userCreator')->middleware('CheckUser');
 Route::get('/business/register', [LoginController::class, 'businessRegisterForm'])->name('businessRegisterForm')->middleware('CheckUser');
 Route::post('/business/register', [LoginController::class, 'businessRegister'])->name('businessRegister')->middleware('CheckUser');
+Route::get('/businesses/list', [LoginController::class, 'BusinessList'])->name('BusinessList')->middleware('CheckUser');
 
 //                                  live
 Route::get('/live', [LoginController::class, 'nacLive'])->name('nacLive');
@@ -55,6 +56,8 @@ Route::get('/live', [LoginController::class, 'nacLive'])->name('nacLive');
 Route::get('/redicrectToWatch', [LoginController::class, 'redicrectToWatch'])->name('redicrectToWatch')->middleware('CheckUser');
 //                                  DISCOVER
 Route::get('/universe', [DiscoverController::class, 'view'])->name('view');
+Route::get('/searchpropery', [DiscoverController::class, 'searchpropery'])->name('searchpropery');
+Route::get('/searchtvshow', [DiscoverController::class, 'searchtvshow'])->name('searchtvshow');
 Route::post('/universe', [DiscoverController::class, 'emailData'])->name('emailData');
 Route::post('/universes', [DiscoverController::class, 'homeLoanData'])->name('homeOwner');
 Route::get('/business/view-all', [DiscoverController::class, 'getAllBusiness'])->name('getAllBusiness');
@@ -70,6 +73,7 @@ Route::get('/upload/video', [VideoController::class, 'uploadForm'])->name('uploa
 Route::post('/upload/video', [VideoController::class, 'upload'])->name('upload')->middleware('CheckUser');
 Route::get('/user/video/edit', [VideoController::class, 'editForm'])->name('editForm')->middleware('CheckUser');
 Route::post('/user/video/edit', [VideoController::class, 'edit'])->name('edit')->middleware('CheckUser');
+Route::get('/video/list', [VideoController::class, 'VideoList'])->name('VideoList')->middleware('CheckUser');
 
 // user hsitory 
 Route::get('/user/history/add', [VideoController::class, 'historyAdd'])->name('historyAdd')->middleware('CheckUser');

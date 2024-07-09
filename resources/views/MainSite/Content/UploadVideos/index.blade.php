@@ -96,6 +96,8 @@
                                 @endif
                             </div>
                         </div>
+                        
+                      
                         <div class="col-sm-12 col-xs-12">
                             <div class="form-group">
                                 <label class="videofield">Zip code <span class="text-danger">*</span></label>
@@ -107,34 +109,78 @@
                                     </span>
                                 @endif
                             </div>
-                            <div class="col-sm-12">
-                                <input style="float: left;" type="submit" name="login-submit" id="login-submit"
-                                    tabindex="4" class="form-control btn btn-login" value="Submit">
-                                <a href="{{ url('home') }}" style="float: right;" tabindex="4"
-                                    class="form-control btn btn-login">Cancel</a>
+                            <div class="form-group">    
+                                <input type="checkbox" id="podcast" name="podcast" value="1">
+                                <label for="podcast" class="videofield">Is this also a podcast?</label>
                             </div>
+                            <div class="row form-group input">
+                              <div class="col-sm-6">
+                                <label for="facebook">Facebook<span class="required"></span></label>
+                                <input type="text" id="facebook" name="facebook" value="{{ old('facebook') }}" placeholder="Facebook link" class="form-control register-input">
+                                @if ($errors->has('facebook'))
+                                <span class="text-danger">{{ $errors->first('facebook') }}</span>
+                                @endif
+                              </div>
+                              <div class="col-sm-6">
+                                <label for="instagram">Instagram<span class="required"></span></label>
+                                <input type="text" id="instagram" name="instagram" value="{{ old('instagram') }}" placeholder="Instagram link" class="form-control register-input">
+                                
+                                @if ($errors->has('instagram'))
+                                <span class="text-danger">{{ $errors->first('instagram') }}</span>
+                                @endif
+                              </div>
+                            </div>
+                            <div class="row form-group input">
+                              <div class="col-sm-6">
+                                  <label for="twitter">Twitter<span class="required"></span></label>
+                                  <input type="text" id="twitter" name="twitter" value="{{ old('twitter') }}" placeholder="Twitter link" class="form-control register-input">
+                                  
+                                  @if ($errors->has('twitter'))
+                                  <span class="text-danger">{{ $errors->first('twitter') }}</span>
+                                  @endif
+                              </div>
+                              <div class="col-sm-6">
+                                <label for="youtube">YouTube<span class="required"></span></label>
+                                <input type="text" id="youtube" name="youtube" value="{{ old('youtube') }}" placeholder="YouTube link" class="form-control register-input">
+                                
+                                @if ($errors->has('youtube'))
+                                <span class="text-danger">{{ $errors->first('youtube') }}</span>
+                                @endif
+                              </div>
+                            </div>
+                            
+                        </div>
+                        <div class="col-sm-12">
+                            <input style="float: left;" type="submit" name="login-submit" id="login-submit"
+                                tabindex="4" class="form-control btn btn-login" value="Submit">
+                            <a href="{{ url('home') }}" style="float: right;" tabindex="4"
+                                class="form-control btn btn-login">Cancel</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6 col-xs-12  column">
                     @csrf
                     <div class="row" style="background:url('{{ asset('/images/rectangle.png') }}') no-repeat ">
-                        <img src="{{ asset('/images/group.png') }}" class="card" id="imgFileUpload">
+                        <img src="{{ asset('/images/group.png') }}" class="card" id="imgFileUpload" height="200px">
                         <br>
                         <br>
 
                         <p id="Successfully" style="color: red"></p>
+
                         <div style="width: 555px">
                             <h6> Please be sure to upload your 11 minute video submission in .mp4 or .mov format. The
                                 maximum size of the video should be 1500 MB. If your video file is greater than 1500MB,
                                 please check the box below and we will contact you to assist. The upload time may vary
                                 depending on the size of your file. You'll receive an email notification once your video is
                                 queued for review and approval.</h6>
-
+                                 <div id="previewContainer" style="display: none;">
+                                    <video id="videoPreview" width="200" height="100" controls></video>
+                                </div>
                                 <div class="form-group">
                                     <label class="videofield">Thumbnail</label>
-                                    <input type="file" name="thumbnail" class="form-control"
+                                    <input type="file" name="thumbnail" class="form-control" id="imageInput" accept="image/*" onchange="displayImage(this)"
                                         >
+                                    <img id="selectedImage" src="#" alt="Selected Image" style="display:none; max-width: 50px; max-height: 50px;">
                                     @if ($errors->has('thumbnail'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('thumbnail') }}</strong>
@@ -154,7 +200,7 @@
                             <div class="form-group">
                                 <label class="videofield">Description <span class="text-danger">*</span></label>
                                 <!--  <input type="textarea" name="video_description" class="form-control" placeholder="Add video decription here" rows="3"> -->
-                                <textarea class="form-control" rows="4" placeholder="Add video decription here" name="video_description"
+                                <textarea class="form-control" rows="2" placeholder="Add video decription here" name="video_description"
                                     id="comment">{{old('video_description')}}</textarea>
                                 @if ($errors->has('video_description'))
                                     <span class="help-block">
@@ -162,8 +208,28 @@
                                     </span>
                                 @endif
                             </div>
+                            
+                            <div class="row form-group input">
+                              <div class="col-sm-6">
+                                <label for="patreon">Patreon<span class="required"></span></label>
+                                <input type="text" id="patreon" name="patreon" value="{{ old('patreon') }}" placeholder="Patreon link" class="form-control register-input">
+                                
+                                @if ($errors->has('patreon'))
+                                <span class="text-danger">{{ $errors->first('patreon') }}</span>
+                                @endif
+                              </div>
+
+                              <div class="col-sm-6">
+                                <label for="vimeo">Vimeo<span class="required"></span></label>
+                                <input type="text" id="vimeo" name="vimeo" value="{{ old('vimeo') }}" placeholder="Vimeo link" class="form-control register-input">
+                                
+                                @if ($errors->has('vimeo'))
+                                <span class="text-danger">{{ $errors->first('vimeo') }}</span>
+                                @endif
+                              </div>
+                            </div>
                         </div>
-                        <input type="file" name="file" id="poster" class="form-control i_file"
+                        <input type="file" name="file" id="poster" class="form-control i_file" accept="video/*" onchange="previewVideo()"
                             style="display: none"><br />
                         @if ($errors->has('file'))
                             <span class="help-block">
@@ -323,4 +389,36 @@
 
    })();
 </script>   --}}
+<script>
+        function displayImage(input) {
+            var file = input.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('selectedImage').src = e.target.result;
+                    document.getElementById('selectedImage').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+       function previewVideo() {
+            var videoInput = document.getElementById('poster');
+            var videoPreview = document.getElementById('videoPreview');
+            var previewContainer = document.getElementById('previewContainer');
+
+            var file = videoInput.files[0];
+
+            if (file) {
+                var videoUrl = URL.createObjectURL(file);
+
+                videoPreview.src = videoUrl;
+                previewContainer.style.display = 'block';
+            } else {
+                // No file selected, hide the preview container
+                previewContainer.style.display = 'none';
+            }
+        }
+
+    </script>
 @endsection

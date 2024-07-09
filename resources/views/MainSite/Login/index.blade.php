@@ -16,10 +16,43 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
+<style type="text/css">
+    #loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
 
+.loader {
+    width: 50px;
+    height: 50px;
+    background-color: #3498db;
+    border-radius: 50%;
+    animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-30px);
+    }
+}
+
+</style>
 <body>
 
-
+    <div id="loader-overlay">
+        <div class="loader"></div>
+    </div>
 
     <section class="Login-page float-left Gradiant-login-color">
         <div class="col-lg-12 col-md-12  col-sm-12 col-xs-12 float-left">
@@ -127,7 +160,14 @@
         </div>
     </div> --}}
 
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+    // This event listener ensures that the loader is removed when the page is fully loaded.
+    var loaderOverlay = document.getElementById("loader-overlay");
+    loaderOverlay.style.display = "none";
+});
 
+    </script>
     <script>
         // function openModal(id) {
         //     if (id) {

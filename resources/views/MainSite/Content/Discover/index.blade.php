@@ -37,111 +37,155 @@
         .marker-place {
             position: absolute;
             background: white;
-            z-index: 99999;
-            bottom: 2px;
-            left: 1px;
-            width: 8%;
-            height: auto;
-            padding: 10px 5px;
-            border-top-right-radius: 10px
+            z-index: 1;
+            left: 5px;
+            bottom: 5px;
+            padding: 8px 15px 8px 5px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 330px;
+        }
+
+        @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+            .marker-place {
+                -webkit-backdrop-filter: blur(10px);
+                backdrop-filter: blur(10px);
+                background-color: rgba(255, 255, 255, 0.7);
+            }
         }
     </style>
+
     <script type="text/javascript">
         BASE_URL = "<?php echo url(''); ?>";
     </script>
-    <div class="map-parent">
-        <div id="map"></div>
-        <div class="marker-place">
-            <div class="one-marker  d-flex align-items-center">
-                <i class="fa fa-map-marker videos-marker"></i>
-                <h6>TV Shows</h6>
-            </div>
-            <div class=" one-marker d-flex align-items-center">
-                <i class="fa fa-map-marker business-marker"></i>
-                <h6>Business</h6>
-            </div>
 
-            <div class=" one-marker d-flex align-items-center ">
-                <i class="fa fa-map-marker home-marker"></i>
-                <h6>Properties</h6>
-            </div>
+    <div class="card m-4">
+        <div class="card-body">
+            <div class="map-parent">
+                <div id="map" class="border-0"></div>
+                <div class="marker-place">
+                    <div class="one-marker d-flex align-items-center">
+                        <i class="fa fa-map-marker videos-marker"></i>
+                        <h6>TV Show</h6>
+                    </div>
+                    <div class=" one-marker d-flex align-items-center">
+                        <i class="fa fa-map-marker business-marker"></i>
+                        <h6>Business</h6>
+                    </div>
 
-        </div>
-    </div>
-    <div class=" d-flex justify-content-between mt-4 mx-4">
-        <input type="text" id="search-input" class="form-control col-2" placeholder="Pin to location ">
-        <div class="">
-            <button onclick="handleHomeLoanModal('home-loan-modal','Home Loan')" class="btn btn-success"> Home Loan</button>
-            <button onclick="handleHomeLoanModal('home-loan-modal','Need Realtor')" class="btn btn-success"> Need
-                Realtor</button>
-            <button onclick="handleHomeOwnerInsuranceModal('homeowner-insurance-modal','Homeowners Insurance')"
-                class="btn btn-success">
-                Homeowners Insurance</button>
-        </div>
-    </div>
-    {{-- top tv shows --}}
-    <div class="d-flex justify-content-between align-items-center mx-4 mt-4">
-        <h1 class="m-0 pb-2">Tv Shows</h1>
-        <a href="">View All</a>
-    </div>
-    <div class="mx-4 row">
-        @foreach ($Videos as $item)
-            @php
-                $encryptedUrl = Crypt::encryptString($item->id);
-            @endphp
-            <div class="card mx-2" style="width: 18rem;">
-
-                <img src="{{ asset('Data/Thumbnail/' . $item->thumbnail) }}" class="card-img-top" alt="">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title font-weight-bold mb-0">{{ substr($item->video_title, 0, 20) }}</h5>
-                    <p class="card-text mt-0"><span class="font-weight-bold mr-1">Gener:</span>{{ $item->genere }}</p>
-                    <div class="mt-auto">
-                        <a href="{{ url('live?watch=' . $encryptedUrl) }}" class="btn btn-primary">Watch</a>
+                    <div class=" one-marker d-flex align-items-center ">
+                        <i class="fa fa-map-marker home-marker"></i>
+                        <h6>Property</h6>
                     </div>
                 </div>
             </div>
-        @endforeach
+
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <input type="text" id="search-input" class="form-control col-2" placeholder="Search a location on map">
+
+                <div>
+                    <button onclick="handleHomeLoanModal('home-loan-modal','Home Loan')" class="btn btn-info">Home Loan</button>
+                    <button onclick="handleHomeLoanModal('home-loan-modal','Need Realtor')" class="btn btn-info">Need Realtor</button>
+                    <button onclick="handleHomeOwnerInsuranceModal('homeowner-insurance-modal','Homeowners Insurance')"
+                        class="btn btn-info">
+                        Homeowners Insurance</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {{-- top tv shows --}}
+    <div class="mx-4">
+        <div class="d-flex justify-content-between align-items-center mt-5">
+            <div class="ml-0 font-weight-semibold" style="font-size: 2rem;">TV Shows</div>
+            <a href="" class="btn btn-sm btn-light">View All</a>
+        </div>
+
+        <input type="text" id="search-tv-show" class="form-control col-2 mt-3" placeholder="Search by title or genre">
+
+        <div class="mt-4 tv-show row">
+            @foreach ($Videos as $item)
+                @php
+                    $encryptedUrl = Crypt::encryptString($item->id);
+                @endphp
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 px-3 py-4">
+                    <div class="card shadow-sm h-100">
+                        <img src="{{ asset('Data/Thumbnail/' . $item->thumbnail) }}" class="card-img-top" alt="">
+
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title font-weight-bold mb-0">{{ substr($item->video_title, 0, 20) }}</h5>
+                            <p class="card-text mt-0"><span class="font-weight-bold mr-1">Genre:</span>{{ $item->genere }}</p>
+                            <div class="mt-auto">
+                                <a href="{{ url('live?watch=' . $encryptedUrl) }}" class="btn btn-primary">Watch</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            @endforeach
+        </div>
     </div>
 
     {{-- business list tables --}}
-    <div class="d-flex justify-content-between align-items-center mx-4 mt-4">
-        <h1 class="m-0 pb-2">Top Businesses</h1>
-        <a href="{{ url('business/view-all') }}">View All</a>
-    </div>
-    <div class="mx-4 row">
-        @foreach ($Business as $item)
-            <div class="card mx-2" style="width: 18rem;">
-                {{-- <img src="..." class="card-img-top" alt="..."> --}}
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title font-weight-bold">{{ $item->name }}</h5>
-                    <p class="card-text">{{ substr($item->about, 0, 20) }}</p>
-                    <div class="mt-auto">
-                        <a target="_blank" href="{{ $item->website }}" class="btn btn-primary">Website</a>
+    <div class="mx-4">
+        <div class="d-flex justify-content-between align-items-center mt-5">
+            <div class="ml-0 font-weight-semibold" style="font-size: 2rem;">Businesses</div>
+            <a href="" class="btn btn-sm btn-light">View All</a>
+        </div>
+
+        <div class="row">
+            @forelse ($Business as $item)
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 p-2">
+                    <div class="card h-100 shadow-sm">
+                        {{-- <img src="..." class="card-img-top" alt="..."> --}}
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title font-weight-bold">{{ $item->name }}</h5>
+                            <p class="card-text">{{ substr($item->about, 0, 20) }}</p>
+                            <div class="mt-auto">
+                                <a target="_blank" href="{{ $item->website }}" class="btn btn-primary">Website</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        @endforeach
-    </div>
-    {{-- top Properties --}}
-    <div class="d-flex justify-content-between align-items-center mx-4 mt-4">
-        <h1 class="m-0 pb-2">Properties</h1>
-        <a href="{{ url('properties/view-all') }}">View All</a>
-    </div>
-    <div class="mx-4 row mb-4">
-        @foreach ($properties as $item)
-            <div class="card mx-2" style="width: 18rem;">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title font-weight-bold">{{ $item->name }}</h5>
-                    <p class="card-text m-0"><span class="font-weight-bold mr-1">City:</span>{{ $item->cityName }}</p>
-                    <p class="card-text m-0"><span class="font-weight-bold mr-1">Price:</span>{{ $item->price }}</p>
-                    <div class="mt-auto">
-                        {{-- <a target="_blank" href="{{ $item->website }}" class="btn btn-primary">Website</a> --}}
-                    </div>
-                </div>
-            </div>
-        @endforeach
+            @empty
+                <p class="col">No businesses found</p>
+            @endforelse
+        </div>
     </div>
 
+    {{-- top Properties --}}
+    <div class="mx-4 my-4">
+        <div class="d-flex justify-content-between align-items-center mt-5">
+            <div class="ml-0 font-weight-semibold" style="font-size: 2rem;">Properties</div>
+            <a href="" class="btn btn-sm btn-light">View All</a>
+        </div>
+
+        <input type="text" id="search-property" class="form-control col-2 mt-3" placeholder="Search by city or price">
+
+        <div class="mt-3 row properties">
+            @foreach ($properties as $item)
+
+            <div class="col-12 col-sm-6 col-mg-4 col-lg-3 p-2">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title font-weight-bold">{{ $item->name }}</h5>
+                        <p class="card-text m-0"><span class="font-weight-bold mr-1">City:</span>{{ $item->cityName }}</p>
+                        <p class="card-text m-0"><span class="font-weight-bold mr-1">Price:</span>{{ $item->price }}</p>
+                        <div class="mt-auto">
+                            {{-- <a target="_blank" href="{{ $item->website }}" class="btn btn-primary">Website</a> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @endforeach
+        </div>
+    </div>
 
     <div class="modal" id="home-loan-modal" data-backdrop="false">
         <div class="modal-dialog">
@@ -176,7 +220,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Message</label>
-                            <textarea type="message" name="message" class="form-control" placeholder="Write somthing...." id="message"
+                            <textarea type="message" name="message" class="form-control" placeholder="Write something...." id="message"
                                 required></textarea>
                             @error('message')
                                 <span class="text-danger">{{ $message }}</span>
@@ -226,7 +270,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Message</label>
-                            <textarea type="message" name="message" class="form-control" placeholder="Write somthing...." id="message"
+                            <textarea type="message" name="message" class="form-control" placeholder="Write something...." id="message"
                                 required></textarea>
                             @error('message')
                                 <span class="text-danger">{{ $message }}</span>
@@ -268,7 +312,7 @@
                             reject("City not found");
                         } else {
                             reject("Geocoder failed due to: " + status);
-                        } 
+                        }
                     }else{
                         console.log(pincode);
                             var lat = latitude;
@@ -280,14 +324,13 @@
                             console.log(cityDetails);
                             resolve(cityDetails);
                     }
-                    
+
                 });
             });
         }
         // to zoom automaticaly on coordinates
         var zoom = {!! json_encode($Video) !!};
-        let currentUrl = 'http://3.7.41.47/nac/public/';
-        let localUrl = 'http://127.0.0.1:8000/';
+        let currentUrl = {!! json_encode(url('')) !!}
         let Business = {!! json_encode($Business) !!};
         let Videos = {!! json_encode($Videos) !!};
         let properties = {!! json_encode($properties) !!};
@@ -296,7 +339,7 @@
         // initialise map
         var map = new google.maps.Map(document.getElementById('map'), {
             center: {
-                lat: 34.    ,
+                lat: 34,
                 lng: -118.4741052
             },
             zoom: 10,
@@ -416,7 +459,7 @@
                             content: '<h6 style="margin:0px">' + element.video_title +
                                 '</h6><p style="font-size:10px;margin-bottom:0">' +
                                 element.creator_name +
-                                '</p><a href="' + currentUrl + 'redicrectToWatch?id=' +
+                                '</p><a href="' + currentUrl + '/redicrectToWatch?id=' +
                                 element.id +
                                 '" style="font-size:10px;margin-bottom:0">Go to video</a>'
                         });
@@ -438,7 +481,7 @@
             map.panTo(center);
             map.setZoom(zoomLevel);
         }
-        // search input 
+        // search input
         var searchInput = document.getElementById('search-input');
         var searchBox = new google.maps.places.SearchBox(searchInput);
         searchBox.addListener('places_changed', function() {
@@ -512,5 +555,31 @@
             alert('Form submitted!');
             $('#home-loan-modal').hide();
         });
+    </script>
+    <script type="text/javascript">
+        $('#search-property').on('keyup',function(){
+            $value=$(this).val();
+            $.ajax({
+                type : 'get',
+                url : '{{URL::to('searchpropery')}}',
+                data:{'search':$value},
+                success:function(data)
+                {
+                    $('.properties').html(data);
+                }
+            });
+        })
+        $('#search-tv-show').on('keyup',function(){
+            $value=$(this).val();
+            $.ajax({
+                type : 'get',
+                url : '{{URL::to('searchtvshow')}}',
+                data:{'search':$value},
+                success:function(data)
+                {
+                    $('.tv-show').html(data);
+                }
+            });
+        })
     </script>
 @endsection

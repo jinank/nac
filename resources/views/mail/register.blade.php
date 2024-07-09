@@ -1,0 +1,1 @@
+<p>Message: {{ $mailsData['bodyMessage'] }}</p>

@@ -1,39 +1,48 @@
 <style>
     .top-4-videos {
-        background-color: rgb(190, 246, 190);
-        padding: 5% 0px;
+        background: rgb(190,246,190);
+        padding: 4rem 0 2rem 0;
         z-index: -1;
+    }
+
+    .upper-section-wrapper {
+        border-radius: 16px;
+        background: gray;
     }
 
    .upper-section {
         position: relative;
-        border-radius: 10px;
-        height: 200px;
+        border-radius: 16px;
+        height: 180px;
         width: 100%;
-
         cursor: pointer;
+        transition: box-shadow 0.2s ease-in-out;
+    }
+
+    .upper-section:hover {
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
     }
 
    .upper-section img {
-        border-radius: 10px;
+        border-radius: 16px;
         width: 100%;
         height: 100%;
         object-fit: cover;
-        z-index: 9;
+        z-index: 1;
 
     }
 
     .upper-section:before {
-
         content: "";
         position: absolute;
         left: 0;
         bottom: 0;
         width: 100%;
         height: 40%;
-        border-radius: 10px;
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
         background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
-        z-index: 9;
+        z-index: 1;
         transition: height 0.5s ease-in-out;
     }
 
@@ -41,7 +50,7 @@
         position: absolute;
         bottom: 0px;
         color: white;
-        z-index: 99999;
+        z-index: 2;
         padding: 10px;
     }
 
@@ -103,23 +112,27 @@
         color: white;
         padding-left: 3px
     }
+
+    .modal {
+        z-index: 10;
+    }
 </style>
     <?php foreach($videos as $key=>$value){?>
 @php
     $encryptedUrl = Crypt::encryptString($value->id);
 @endphp
 <br/>
-        <div class="col-12 col-md-4  col-lg-3 mt-2" style="margin-top: 10px;">
-            <div class="upper-section">
+        <div class="col-12 col-md-4 col-lg-3 mb-5 mt-1" style="margin-top: 10px;">
+            <div class="upper-section-wrapper">
+                <div class="upper-section shadow-sm">
                 <a href="{{ url('live?watch=' . $encryptedUrl) }}">
-                    <img src="{{ asset('Data/Thumbnail/' . $value->thumbnail) }}" alt="">
+                    <img src="{{ asset('Data/Thumbnail/' . $value->thumbnail) }}" alt="" onerror="showplaceholder(event, '{{ asset('images/placeholder.jpg') }}')">
                     <div class="play-button">
                         <i class="fa fa-play"></i>
                     </div>
                     <div class="video-title">
                         <h4>{{ Str::limit($value->video_title, 30, '...') }}</h4>
                         <h6>{{ $value['genere']->title }}</h6>
-                        <input type="checkbox" name="select" value="video_{{$key}}">&nbsp;<label> Select to Vote</label>
                     </div>
                 </a>
                 <div class="hover-text">
@@ -145,7 +158,16 @@
 
                 </div>
             </div>
+            </div>
         </div>
         <br/>
     <?php  } ?>
- 
+
+<script>
+
+function showplaceholder(event, image) {
+    console.log(event);
+    event.target.src = image;
+}
+
+</script>

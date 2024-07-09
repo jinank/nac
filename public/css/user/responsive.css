@@ -1,0 +1,124 @@
+/* Extra small devices (phones, 600px and down) */
+h1.left {
+    /*float: left;*/
+    font-size: 27px;
+    font-family: sans-serif;
+    font-weight: 500;
+}
+
+h1.right {
+     float: right; 
+    font-size: 27px;
+    font-family: sans-serif;
+    font-weight: 500;
+}
+@media only screen and (max-width: 600px) {
+  .container {
+    width: unset;
+}
+ .body-image {
+    /* margin-left: 128px; */
+    margin-top: 30px;
+    width: 68%;
+    text-align: center;
+}
+.image-login {
+    text-align: center;
+}
+}
+@media only screen and (max-width: 1200px) {
+li.col-lg-3.col-sm-4.col-xs-12.float-left.top-video {
+    min-width: 30%!important;
+    float: left!important;
+    margin-bottom: 47px!important;
+}
+.box-top100 {
+    box-shadow: 0px 0px 6px #00000029;
+    height: 584px!important;
+    padding: 14px;
+    margin-bottom: 23px;
+    padding-top: 32px;
+}
+li.col-lg-3{
+
+}
+}
+@media only screen and (max-width: 999px) {
+/*Index page css start*/
+  section.Gradiant-color-left {
+      height: auto !important;
+  }
+  /*Index page css end*/
+   /*Forgot password start*/
+    .forgot-Password .image-login img {
+        margin-top: 40px !important;
+        text-align: center;
+        width: 100%;
+    }
+   /*Forgot password end*/
+
+   /* Login page css start*/
+  .body-image {
+        margin-top: 30px;
+        width: 68%;
+        text-align: center;
+    }
+    .image-login {
+        text-align: center;
+    }
+    .panel-login {
+        width: 100%!important ;
+    }
+      .logindiv {
+          margin-top: 40px;
+          float: left !important;
+          height: 427px;
+          width: 100%!important;
+      }
+      .panel-login input[type="text"], .panel-login input[type="email"], .panel-login input[type="password"] {
+        border: 1px solid #ddd;
+        font-size: 14px;
+        margin: 0px!important;
+        height: 38px;
+        width: 100%!important;
+     }
+      label {
+          margin: 0px!important;
+          height: 22px;
+      }
+      .text-right {
+       margin-right: 0px !important; 
+      }
+      .form-group {
+          margin-bottom: 15px !important;
+      }
+      a.form-control.btn.btn-register {
+            float: right;
+      }
+    /* Login page css end*/
+
+    /*Register page css start*/
+      section.Register-page{
+        height: auto!important;
+      }
+    /*Register page css end*/
+}
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+ 
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+
+}

@@ -7,20 +7,85 @@
     <!-- Fav Icon -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Athens Creative</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Custom css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('/css/user/theme.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('/css/user/responsive.css') }}">
 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.6.2/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-.11.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="{{ asset('/js/user/main.js') }}"></script>
 
 </head>
+<style type="text/css">
+    #loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
 
+.loader {
+    width: 50px;
+    height: 50px;
+    background-color: #3498db;
+    border-radius: 50%;
+    animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-30px);
+    }
+}
+
+.nav-logo-link {
+    display: block;
+    padding: 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease-out;
+}
+
+.nav-logo-link:hover {
+    background-color: gainsboro;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: black;
+}
+
+.nav-item a {
+    display: block;
+    padding: 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease-out;
+}
+
+.nav-item a:hover {
+    background-color: #bebebe;
+}
+
+.nav-item .active {
+    background-color: #e0e0e0;
+}
+
+</style>
 <body>
+
+     <div id="loader-overlay">
+        <div class="loader"></div>
+    </div>
 
     {{-- nav --}}
 
@@ -47,95 +112,121 @@
                 cursor: !important;
             }
         </style>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light pb-0">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{{ url('/') }}"><img class="m-0"
-                        src="{{ asset('/images/logo.png') }}" alt=""></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse row" id="navbarNav">
-                    <ul class="navbar-nav col-8">
-                        <li class="nav-item {{ Request::is('live') ? 'active' : '' }}">
-                            <a href="{{ url('home') }}" class="nav-link {{ Request::is('show ') ? 'active' : '' }}"
-                                aria-current="page" href="#"><img class="ballot"
-                                    src="{{ asset('/images/Group_520.jpeg') }}"> Nac Live</a>
-                        </li>
-                        <li class="nav-item {{ Request::is('video/top-100') ? 'active' : '' }}">
-                            <a class="nav-link {{ Request::is('video/top-100') ? 'active' : '' }}"
-                                href="{{ url('/video/top-100') }}" id="top100videos"><i class="fa fa-star"></i>Top
-                                100 </a>
-                        </li>
-                        <li class="nav-item {{ Request::is('universe') ? 'active' : '' }}"><a
-                                class="nav-link {{ Request::is('universe') ? 'active' : '' }}"
-                                href="{{ url('universe') }}" id="universe"> <img class="ballot"
-                                    src="{{ asset('/images/universe.png') }}">
-                                Universe</a></li>
-                        <li class="nav-item {{ Request::is('ballot') ? 'active' : '' }}"><a
-                                class="nav-link {{ Request::is('ballot') ? 'active' : '' }}"
-                                href="{{ url('/ballot') }}" id="ballot"><img class="ballot"
-                                    src="http://3.7.41.47/newathenscreative/public/images/Group_521.jpeg"> NAC Ballot
-                            </a>
-                        </li>
-                        <li class="nav-item "><a class="nav-link" href="{{ url('/coming-soon') }}" id="ballot"><img
-                                    class="ballot" src="{{ asset('/images/Group_51911.jpeg') }}"> NAC Invest </a>
-                        </li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/coming-soon') }}" id="ballot"><img
-                                    class="ballot" src="{{ asset('/images/Group_518.jpeg') }}"> NAC Network </a>
-                        </li>
-                    </ul>
-                    <li class="col-12 col-md-4 d-flex justify-content-end align-items-center">
-                        <a href="{{ url('/business/register') }}" class="form-control btn btn-register"
-                            target="_blank">Business</a>
-                        &nbsp;
-                        <a href="{{ url('/creator/registration') }}" class="form-control btn btn-register"
-                            target="_blank">Creator</a>
-                        &nbsp;
-                        @if ($creator && !empty($creator->user_id))
-                            <a href="{{ url('/upload/video') }}" class="form-control btn btn-register"
-                                target="_blank">Create</a>
-                        @endif()
-                        @if (session()->has('user'))
-                            <div class="dropdown">
-                                @if ($userData->image && !$userData->image)
-                                    <button style="border: none;background: none" class="px-3 dropdown-toggle"
-                                        type="button" data-toggle="dropdown"><img class="dashboard-header"
-                                            src="{{ asset('Data/User/Profile/' . $userData->image) }}">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light py-1 shadow-sm">
+            <a class="navbar-brand" href="{{ url('/') }}">
+                <img class="mt-0 mr-3" src="{{ asset('/images/main_logo_center.png') }}" style="width: auto; height: 45px;" />
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse row" id="navbarNav">
+                <ul class="navbar-nav col-7">
+                    <li class="nav-item {{ Request::is('live') ? 'active' : '' }}">
+                        <a href="{{ url('home') }}" class="nav-link {{ Request::is('show ') ? 'active' : '' }}"
+                            aria-current="page" href="#"><img class="ballot pt-1"
+                                src="{{ asset('/images/Group_520.jpeg') }}" style="width: 18px; height: auto;" />
+                            NAC Live</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/coming-soon') }}" id="ballot"><img class="ballot mr-1 pt-1 pt-1"
+                                src="{{ asset('/images/header-icons/radio1.png') }}" style="width: 18px; height: auto;" />NAC Radio</a>
+                    </li>
+
+                    <li class="nav-item {{ Request::is('video/top-100') ? 'active' : '' }}">
+                        <a class="nav-link {{ Request::is('video/top-100') ? 'active' : '' }}"
+                            href="{{ url('/video/top-100') }}" id="top100videos"><i class="fa fa-star mr-1 pt-1" style="font-size: 1rem"></i>Top 100
+                        </a>
+                    </li>
+
+                    <li class="nav-item {{ Request::is('universe') ? 'active' : '' }}">
+                        <a class="nav-link {{ Request::is('universe') ? 'active' : '' }}" href="{{ url('universe') }}"
+                            id="universe">
+                            <img class="ballot" src="{{ asset('/images/universe.png') }}" style="width: 20px; height: auto; padding-top: 2px" />
+                            Universe
+                        </a>
+                    </li>
+
+                    <li class="nav-item {{ Request::is('ballot') ? 'active' : '' }}">
+                        <a class="nav-link {{ Request::is('ballot') ? 'active' : '' }}" href="{{ url('/ballot') }}"
+                            id="ballot mr-1 pt-1"><img class="ballot" src="{{ asset('/images/Group_521.jpeg') }}" style="width: 18px; height: auto;" />
+                            NAC Ballot
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/coming-soon') }}" id="ballot"><img class="ballot"
+                                src="{{ asset('/images/Group_51911.jpeg') }}" style="width: 18px; height: auto;" />
+                            NAC Invest
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/coming-soon') }}" id="ballot"><img class="ballot"
+                                src="{{ asset('/images/Group_520.jpeg') }}" style="width: 18px; height: auto;" />
+                            NAC Network
+                        </a>
+                    </li>
+                </ul>
+
+                <li class="col-12 col-md-5 d-flex justify-content-end align-items-center">
+                    <a href="{{ url('/business/register') }}" class="form-control btn btn-register"
+                        target="_blank">Business</a>
+
+                    &nbsp;
+
+                    <a href="{{ url('/creator/registration') }}" class="form-control btn btn-register"
+                        target="_blank">Creator</a>
+
+                    &nbsp; @if (session()->has('user'))
+
+                        @endif @if (session()->has('user'))
+                            <div class="dropdown" style="min-width: 90px">
+                                @if ($userData->image)
+                                    <button style="border: none; background: none" class="px-3 dropdown-toggle" type="button"
+                                        data-toggle="dropdown">
+                                        <img class="dashboard-header"
+                                            src="{{ asset('Data/User/Profile/' . $userData->image) }}" />
                                     </button>
                                 @else
-                                    <button style="border: none;background: none" type="button"
-                                        class="px-3 dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><img
-                                            class="dashboard-header" src="{{ asset('/images/user.png') }}"> </button>
+                                    <button style="border: none; background: none" type="button" class="px-3 dropdown-toggle"
+                                        data-toggle="dropdown" aria-expanded="false">
+                                        <img class="dashboard-header" src="{{ asset('images/user.png') }}" />
+                                    </button>
                                 @endif
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ url('/user/profile') }}"> <i class="fa fa-user"
-                                            style="font-size:17px"></i> Profile</a>
-                                    <a class="dropdown-item" href="{{ url('/user/logout') }}"><i
-                                            class="fa fa-sign-out" style="font-size:17px"></i>
-                                        LogOut</a>
-                                    <a class="dropdown-item cursor" onclick="openModal('registerModal')"><i
-                                            class="fa fa-lock"style="font-size:17px;"></i>
-                                        Login / Register
-                                    </a>
+                                    <a class="dropdown-item" href="{{ url('/user/profile') }}">
+                                        <i class="fa fa-user" style="font-size: 17px"></i> Profile</a>
 
+                                    <a class="dropdown-item" href="{{ url('/businesses/list') }}">
+                                        <i class="fa fa-briefcase" style="font-size: 17px"></i> Your
+                                        Businesses</a>
+
+                                    <a class="dropdown-item" href="{{ url('/video/list') }}">
+                                        <i class="fa fa-video-camera" style="font-size: 17px"></i> Your
+                                        Videos</a>
+
+                                    <a class="dropdown-item" href="{{ url('/user/logout') }}"><i class="fa fa-sign-out"
+                                            style="font-size: 17px"></i> LogOut</a>
+
+                                    <a class="dropdown-item cursor" onclick="openModal('registerModal')"><i
+                                            class="fa fa-lock" style="font-size: 17px"></i> Login /
+                                        Register</a>
                                 </div>
                             </div>
                         @else
-                            <button class="btn  dropdown-toggle" type="button" style="pointer-events: none;"
-                                data-toggle="dropdown"><img class="dashboard-header"
-                                    src="{{ asset('/images/user.png') }}">
-                            </button>
+                            <a href="{{ url('user/register') }}" class="form-control btn btn-register"
+                                target="_blank">Login/Register</a>
+                            &nbsp;&nbsp;&nbsp;
                         @endif
-                        <a href="https://nacopedia.com/" class="form-control btn btn-register"
-                            target="_blank">nacopedia.com</a>
-                    </li>
-
-                </div>
-
-
+                        <a href="https://nacopedia.com/" class="btn btn-register" target="_blank"
+                            style="min-width: 95px">nacopedia</a>
+                </li>
             </div>
-
         </nav>
     @else
         <style>
@@ -150,28 +241,36 @@
         </style>
         <nav class="navbar navbar-inverse-login">
             <div class="container">
-                <div class="col-md-3 col-xs-3 ">
-                    <div class="navbar-header">
-                        <a class="login-header" href="{{ url('/') }}"><img
-                                src="{{ asset('images/mainlogo.png') }}">
+
+                <div class="col-6 col-md-4">
+                    <a href="{{ url('/') }}">
+                        <img class="mt-1" src="{{ asset('images/mainlogo.png') }}">
+                    </a>
+                </div>
+
+                <div class="col-6 col-md-3 d-flex align-items-center pl-lg-4 ml-lg-4">
+
+                    <li>
+                        <a href="https://nacopedia.com/terms" target="_blank" class="nav-logo-link" title="Terms & Conditions">
+                            <img src="{{ asset('/images/header-icon-terms.png') }}" width="35">
                         </a>
-                    </div>
+                    </li>
+
+                    <li>
+                        <a href="{{ url('/affiliations') }}" class="nav-logo-link" title="Affiliations">
+                            <img src="{{ asset('/images/header-icon-business.png') }}" width="35">
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url('/coming-soon') }}" class="nav-logo-link" title="Education">
+                            <img src="{{ asset('/images/header-icon-education.png') }}" width="35">
+                        </a>
+                    </li>
+
                 </div>
-                <div class="col-md-5 col-xs-5 d-flex justify-content-center">
 
-                    <li><a href="{{ url('/coming-soon') }}" class=""><img
-                                src="http://3.7.41.47/newathenscreative/public/images/header-icons/OD2020_NACIconDesigns_TermsofUse_Black+Grey-01.png"
-                                width="40"></a></li>
-                    <li> <a href="{{ url('/affiliations') }}" class=""><img
-                                src="http://3.7.41.47/newathenscreative/public/images/header-icons/OD2020_NACIconDesigns_Business_Black+Grey-01_1.png"
-                                width="40"></a></li>
-
-                    <li><a href="{{ url('/coming-soon') }}" class=""><img
-                                src="{{ asset('/images/header-icons/OD2020_NACIconDesigns_Education_Black-01 (1).png') }}"
-                                width="40"></a></li>
-
-                </div>
-                <div class="col-md-4 col-xs-4">
+                <div class="col-12 col-md-4">
                     <ul class="nav navbar-nav navbar-right-loginpage lineheight" style="display: inline !important">
                         {{-- <li><a href="{{ url('business.register') }}">Register your Business</a></li> --}}
 
@@ -183,12 +282,13 @@
                                 </a></li>
                         @else
                             <li><a href="{{ url('login') }}" style="color: #1c5c00">Login</a></li>
-                            <li><span class="hh">/</span></li>
-                            <li><a href="{{ url('user/register') }}" style="color: #1c5c00">Register</a>
+                            <li><span class="hh">|</span></li>
+                            <li><a href="{{ url('user/register') }}" style="color: #1c5c00">Register</a> </li>
+                            <li class="pl-3">
+                                <a href="https://nacopedia.com/" class="form-control btn btn-register" target="_blank" style="width: 95px;">nacopedia</a>
                             </li>
-                            </li>
-                            <a href="https://nacopedia.com/" class="form-control btn btn-register" target="_blank" style="margin-left:5px;">nacopedia.com</a>
-                        @endif 
+
+                        @endif
                     </ul>
                 </div>
             </div>
@@ -481,6 +581,14 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"
         integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous">
+    </script>
+     <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+    // This event listener ensures that the loader is removed when the page is fully loaded.
+    var loaderOverlay = document.getElementById("loader-overlay");
+    loaderOverlay.style.display = "none";
+});
+
     </script>
     {{-- <script>
         openModal('voteModel')

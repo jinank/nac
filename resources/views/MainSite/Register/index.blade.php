@@ -26,8 +26,42 @@
 
     <!-- Custom css -->
 </head>
+<style type="text/css">
+    #loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
 
+.loader {
+    width: 50px;
+    height: 50px;
+    background-color: #3498db;
+    border-radius: 50%;
+    animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-30px);
+    }
+}
+
+</style>
 <body>
+    <div id="loader-overlay">
+        <div class="loader"></div>
+    </div>
     <section class="Register-page">
         <div class="container top-bottom">
             <div class="col-lg-6 col-md-6  col-sm-6 col-xs-12 float-left">
@@ -148,7 +182,7 @@
                                     <div class="" style="display: flex;align-items: center">
                                         <input type="checkbox" class="m-0 p-0">
                                         <span style="margin-left: 4px;padding: 0">I accept the <a
-                                                href="{{ url('/terms-condtions') }}">terms and conditions</a></span>
+                                                href="https://nacopedia.com/terms">terms and conditions</a></span>
 
                                     </div>
                                     <input type="submit"  name="register-submit" tabindex="4"
@@ -203,7 +237,14 @@
     <!-- jQuery (Bootstrap requires jQuery) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+    // This event listener ensures that the loader is removed when the page is fully loaded.
+    var loaderOverlay = document.getElementById("loader-overlay");
+    loaderOverlay.style.display = "none";
+});
 
+    </script>
     <script>
         let businessRegistered = @json(session('msg-success'));
 

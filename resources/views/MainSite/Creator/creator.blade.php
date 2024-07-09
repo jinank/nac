@@ -26,8 +26,42 @@
 
     <!-- Custom css -->
 </head>
+<style type="text/css">
+    #loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
 
+.loader {
+    width: 50px;
+    height: 50px;
+    background-color: #3498db;
+    border-radius: 50%;
+    animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-30px);
+    }
+}
+
+</style>
 <body>
+    <div id="loader-overlay">
+        <div class="loader"></div>
+    </div>
     <section class="Register-page">
         <div class="container top-bottom">
             <div class="col-lg-6 col-md-6  col-sm-6 col-xs-12 float-left">
@@ -48,11 +82,10 @@
                     <div class="panel-body">
                         <div class="row left-right">
                             <div class="col-lg-6 ">
-
                                 <form action="{{ url('creator/registration') }}" method="POST"
                                     id="myForm">
                                     @csrf
-                                    <div class="form-group input">
+                                    <!-- <div class="form-group input">
                                         {{-- <input type="hidden" name="type" id="form_type"> --}}
                                         <label>Title<span class="required">*</span></label>
                                         <input type="text" id="input-field" value="{{ old('title') }}"
@@ -61,7 +94,7 @@
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
 
-                                    </div>
+                                    </div> -->
                                     <div class="form-group input">
                                         <label>Creator Name<span class="required">*</span></label>
                                         <input type="text" id="last-field" value="{{ old('name') }}" name="name"
@@ -88,6 +121,29 @@
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
+                                    <div class="form-group input">
+                                        <label for="facebook">Facebook<span class="required"></span></label>
+                                        <input type="text" id="facebook" name="facebook" value="{{ old('facebook') }}" placeholder="Facebook link" class="form-control register-input">
+                                        @if ($errors->has('facebook'))
+                                        <span class="text-danger">{{ $errors->first('facebook') }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group input">
+                                        <label for="instagram">Instagram<span class="required"></span></label>
+                                        <input type="text" id="instagram" name="instagram" value="{{ old('instagram') }}" placeholder="Instagram link" class="form-control register-input">
+                                        
+                                        @if ($errors->has('instagram'))
+                                        <span class="text-danger">{{ $errors->first('instagram') }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group input">
+                                        <label for="twitter">Twitter<span class="required"></span></label>
+                                        <input type="text" id="twitter" name="twitter" value="{{ old('twitter') }}" placeholder="Twitter link" class="form-control register-input">
+                                        
+                                        @if ($errors->has('twitter'))
+                                        <span class="text-danger">{{ $errors->first('twitter') }}</span>
+                                        @endif
+                                    </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group input">
@@ -109,8 +165,43 @@
                                 <div class="form-group input">
                                     <label>Description<span class="required">*</span></label>
                                     <textarea name="description" id="description" value="{{ old('description') }}" class="form-control register-input"
-                                        cols="30" rows="10"></textarea>
+                                        cols="10" rows="6"></textarea>
                                 </div>
+                                <div class="form-group input">
+                                    <label for="youtube">YouTube<span class="required"></span></label>
+                                    <input type="text" id="youtube" name="youtube" value="{{ old('youtube') }}" placeholder="YouTube link" class="form-control register-input">
+                                    
+                                    @if ($errors->has('youtube'))
+                                    <span class="text-danger">{{ $errors->first('youtube') }}</span>
+                                    @endif
+                                  </div>
+
+                                  <div class="form-group input">
+                                    <label for="patreon">Patreon<span class="required"></span></label>
+                                    <input type="text" id="patreon" name="patreon" value="{{ old('patreon') }}" placeholder="Patreon link" class="form-control register-input">
+                                    
+                                    @if ($errors->has('patreon'))
+                                    <span class="text-danger">{{ $errors->first('patreon') }}</span>
+                                    @endif
+                                  </div>
+                                  <!-- <div class="form-group input">
+                                    <label for="vimeo">Vimeo<span class="required"></span></label>
+                                    <input type="text" id="vimeo" name="vimeo" value="{{ old('vimeo') }}" placeholder="Vimeo link" class="form-control register-input">
+                                    
+                                    @if ($errors->has('vimeo'))
+                                    <span class="text-danger">{{ $errors->first('vimeo') }}</span>
+                                    @endif
+                                  </div> -->
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group input">
+                                    <label for="vimeo">Vimeo<span class="required"></span></label>
+                                    <input type="text" id="vimeo" name="vimeo" value="{{ old('vimeo') }}" placeholder="Vimeo link" class="form-control register-input">
+                                    
+                                    @if ($errors->has('vimeo'))
+                                    <span class="text-danger">{{ $errors->first('vimeo') }}</span>
+                                    @endif
+                                  </div>
                             </div>
                         </div>
                         <div class="form-group input">
@@ -146,7 +237,14 @@
     <!-- jQuery (Bootstrap requires jQuery) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+    // This event listener ensures that the loader is removed when the page is fully loaded.
+    var loaderOverlay = document.getElementById("loader-overlay");
+    loaderOverlay.style.display = "none";
+});
 
+    </script>
     {{-- <script>
         let businessRegistered = @json(session('msg-success'));
 

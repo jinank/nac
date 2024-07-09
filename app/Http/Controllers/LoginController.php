@@ -6,6 +6,7 @@ use App\Business;
 use App\Creator;
 use App\Like;
 use App\Mail\CreatorMail;
+use App\Mail\NacLead;
 use App\NewBusiness;
 use App\RealEstate;
 use App\User;
@@ -19,6 +20,9 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use VideoHistory;
+use App\Mail\BusinessMail;
+use App\Mail\RegisterUserMail;
+use App\Mail\RegisterMail;
 
 class LoginController extends Controller
 {
@@ -92,6 +96,16 @@ class LoginController extends Controller
             $user->image = $Thumbnailfilename;
         }
         $result = $user->save();
+        // send mail while register user
+        $mailsData = [
+                'bodyMessage' => 'Hello '.$req->first_name.' '.$req->last_name.' Welcome to NAC, You are successfully registered in Newathenscreative.',
+            ];
+            Mail::to($req->email)->send(new RegisterMail($mailsData));
+        $mailData = [
+                'subject' => 'Register User',
+                'bodyMessage' => $req->first_name.' '.$req->last_name.' User is registered in your website.',
+            ];
+            Mail::to('newathenscreative@gmail.com')->send(new RegisterUserMail($mailData));
         if ($result) {
             session()->put('user', $user);
             if ($req->type == 'yes') {
@@ -252,16 +266,22 @@ class LoginController extends Controller
 
         $timestamp = time();
         $req->validate([
-            "title" => 'required',
+            //"title" => 'required',
             "name" => 'required',
             "genre" => 'required',
             "zip_code" => 'required|numeric',
             // 'image' => 'mimes:png,jpeg,jpg',
-            'tags' => 'required'
+            'tags' => 'required',
+            "facebook" => 'nullable|url',
+            "instagram" => 'nullable|url',
+            "twitter" => 'nullable|url',
+            "youtube" => 'nullable|url',
+            "patreon" => 'nullable|url',
+            "vimeo" => 'nullable|url',
         ]);
         $user =  session('user')->id;
         $creator = new Creator();
-        $creator->title = $req->title;
+        //$creator->title = $req->title;
         $creator->name = $req->name;
         $creator->genre = $req->genre;
         $creator->tags = $req->tags;
@@ -269,6 +289,12 @@ class LoginController extends Controller
         $creator->zip_code = $req->zip_code;
         $creator->description = $req->description;
         $creator->user_id = $user;
+        $creator->facebook = $req->facebook;
+        $creator->instagram = $req->instagram;
+        $creator->twitter = $req->twitter;
+        $creator->youtube = $req->youtube;
+        $creator->patreon = $req->patreon;
+        $creator->vimeo = $req->vimeo;
         if ($req->hasFile('image')) {
             $thumnailRequest = $req->file('image');
             $originalThumnail = $thumnailRequest->getClientOriginalName();
@@ -284,7 +310,8 @@ class LoginController extends Controller
                 'bodyMessage' => 'Thank you for registering. We will let you know once it is approved',
             ];
             // dd($mailData);
-            Mail::to($user->email)->send(new CreatorMail($mailData));
+            //Mail::to($user->email)->send(new CreatorMail($mailData));
+            //Mail::to('newathenscreative@gmail.com')->send(new CreatorMail($mailData));
             return redirect('/upload/video')->with(['msg-success' => 'You have registered as creator']);
         } else {
             return redirect('creator/registration')->with(['msg-errror' => 'Something went wrong please try again']);
@@ -293,7 +320,8 @@ class LoginController extends Controller
 
     public function businessRegisterForm()
     {
-        return view('MainSite.Business.business');
+        $user = session('user')->id;
+        return view('MainSite.Business.business', compact('user'));
     }
 
     public function businessRegister(Request $req)
@@ -302,7 +330,13 @@ class LoginController extends Controller
             "name" => 'required',
             "address" => 'required',
             "website" => 'required',
-            "phone_number" => 'required'
+            "phone_number" => 'required',
+            "facebook" => 'nullable|url',
+            "instagram" => 'nullable|url',
+            "twitter" => 'nullable|url',
+            "youtube" => 'nullable|url',
+            "patreon" => 'nullable|url',
+            "vimeo" => 'nullable|url',
         ]);
         $business = new NewBusiness();
         $business->name = $req->name;
@@ -311,11 +345,29 @@ class LoginController extends Controller
         $business->website = $req->website;
         $business->phone_number = $req->phone_number;
         $business->address = $req->address;
+        $business->facebook = $req->facebook;
+        $business->instagram = $req->instagram;
+        $business->twitter = $req->twitter;
+        $business->youtube = $req->youtube;
+        $business->patreon = $req->patreon;
+        $business->vimeo = $req->vimeo;
+        $business->user_id = $req->userid;
         $result = $business->save();
+        $mailData = [
+                'subject' => 'Business registered',
+                'bodyMessage' => $req->input('name').' Business is registered in your website.',
+            ];
+            Mail::to('newathenscreative@gmail.com')->send(new BusinessMail($mailData));
         if ($result) {
             return redirect('/home')->with(['msg-success' => 'You have registered as business']);
         } else {
             return redirect('business/register')->with(['msg-errror' => 'Something went wrong please try again']);
         }
     }
+
+    public function BusinessList(){
+    $user = session('user')->id;
+    $Business = NewBusiness::where('user_id',$user)->get();
+    return view('MainSite.Business.businessList', compact('Business'));
+  }
 }

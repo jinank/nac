@@ -13,6 +13,17 @@ use App\VideoHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Storage;
+use Intervention\Image\Facades\Image;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VideoMail;
+use \getID3;
+use \pydub\AudioSegment;
+use FFMpeg\FFMpeg;
+use FFMpeg\Coordinate\TimeCode;
+
 
 class VideoController extends Controller
 {
@@ -23,6 +34,23 @@ class VideoController extends Controller
   }
   public function upload(Request $request)
   {
+
+    $request->validate([
+    		// "video_name" => 'required',
+    		// "creater_name" => 'required',
+	     //    "genre" => 'required|not_in:0',
+	     //    "tags" => 'required',
+	     //    // "file" => 'required|mimes:mp4,avi,mov|max:1500000',
+      //   	// "thumbnail" => 'mimes:png,jpeg,jpg|max:1500000',
+    		// "zip_code" => 'required|regex:/^[0-9]+$/',
+    		// "video_description" => 'required',
+            "facebook" => 'nullable|url',
+            "instagram" => 'nullable|url',
+            "twitter" => 'nullable|url',
+            "youtube" => 'nullable|url',
+            "patreon" => 'nullable|url',
+            "vimeo" => 'nullable|url',
+        ]);
 
     $user = User::where('email', '=', session('user')->email)->first();;
 /*
@@ -47,11 +75,43 @@ class VideoController extends Controller
         'thumbnail.max' => 'Maximum thumbnail file size is 1.5 GB.',
     ]
     );*/
+    if($request->podcast == ''){
+    	$request->podcast = 0;
+    }
     $file = $request->file('file');
     $originalName = $file->getClientOriginalName();
     $timestamp = time();
     $filename = $timestamp . '_' . $originalName;
     $file->move(public_path('Data/Video'), $filename);
+
+    // video conver into audio
+        if($request->podcast == 1)
+        {
+ 			// Set the path for the temporary video file
+			$tempVideoPath = public_path('Data/Video') . '/' . $filename;
+
+			// Use getID3 to get information about the video file
+			$getID3 = new \getID3();
+			$fileInfo = $getID3->analyze($tempVideoPath);
+			
+			if (isset($fileInfo['audio']['streams'][0])) {
+				    $audioData = $fileInfo['audio']['streams'][0];
+				} elseif (isset($fileInfo['audio']['data'])) {
+				    $audioData = $fileInfo['audio']['data'];
+				} else {
+				    $audioData = null;
+				}
+				
+				if ($audioData) {
+					
+				    $audioFileName = time() . '.mp3';
+				    $audioFilePath = public_path('Data/audio/' . $audioFileName);
+
+				    file_put_contents($audioFilePath, $audioData);
+				}
+				
+		}
+
     if ($request->thumbnail) {
       $thumnailRequest = $request->file('thumbnail');
       $originalThumnail = $thumnailRequest->getClientOriginalName();
@@ -70,7 +130,32 @@ class VideoController extends Controller
       $video->thumbnail = $Thumbnailfilename;
       $video->description = $request->video_description;
       $video->other_video_link = $request->other_video_link;
+      $video->facebook = $request->facebook;
+      $video->instagram = $request->instagram;
+      $video->twitter = $request->twitter;
+      $video->youtube = $request->youtube;
+      $video->patreon = $request->patreon;
+      $video->vimeo = $request->vimeo;
+      $video->podcast = $request->podcast;
       $video->save();
+
+      // Generate QR Code
+        $qrCode = QrCode::format('png')->size(200)->generate(url("Data/Video/{$video->file_name}"));
+
+      // Save QR Code image
+        Storage::disk('public')->put("qrcodes/{$video->id}.png", $qrCode);
+        $fileContents = $qrCode;
+        $ds = DIRECTORY_SEPARATOR;
+        $filePath = public_path("Data{$ds}qrcodes{$ds}{$video->id}.png");
+        file_put_contents($filePath, $fileContents);
+
+      // send mail while upload video
+        $mailData = [
+                'subject' => 'Video uploaded',
+                'bodyMessage' => $request->video_name.' Video is uploaded in your website.',
+            ];
+            Mail::to('newathenscreative@gmail.com')->send(new VideoMail($mailData));
+
       return redirect()->back()->with('success', 'Video uploaded successfully.');
     }else{
       return redirect()->back()->with('error', 'Something went wrong, please try again after sometime');
@@ -223,11 +308,13 @@ class VideoController extends Controller
 
     $videos = \App\Video::join('likes', 'videos.id', '=', 'likes.video_id')
       ->where('likes.user_id', $currentUser->id)
-      ->join('generes', 'videos.genere_id', '=', 'generes.id')
+      ->leftjoin('generes', 'videos.genere_id', '=', 'generes.id')
       ->orderBy('videos.id', 'desc')
       ->select('videos.*', "videos.id as video_id", 'generes.title as genere_name')
       ->where('videos.is_approved','=','Yes')
+      ->groupBy('likes.video_id')
       ->get();
+      
     return view('MainSite.Content.LikedVideos.index', compact('videos'));
   }
   // user history
@@ -318,6 +405,12 @@ class VideoController extends Controller
     {
       return redirect()->back()->with(['msg-error'=>'Something went wrong']);
     }
+  }
+
+  public function VideoList(){
+    $user = session('user')->id;
+    $Videos = Video::where('user_id',$user)->get();
+    return view('MainSite.Content.UploadVideos.videoList', compact('Videos'));
   }
 
 }
